@@ -52,14 +52,14 @@ button, input, textarea { font: inherit; }
 .memorial-kicker { align-items: center; display: flex; gap: .7rem; }
 .memorial-kicker span { color: var(--mem-accent); font-size: .85rem; }
 h1, h2 { font-family: var(--mem-serif); font-weight: 400; letter-spacing: -.025em; line-height: 1.12; margin: 0; }
-h1 { font-size: clamp(3.2rem, 9vw, 6.8rem); }
+h1 { font-size: clamp(2.6rem, 6.5vw, 4.6rem); }
 h1 span { display: block; }
 h1 span:first-child { color: var(--mem-muted); font-size: .52em; letter-spacing: -.02em; }
 h1 span:last-child { color: var(--mem-ink); }
 h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .memorial-dates { color: var(--mem-muted); font-family: var(--mem-serif); font-size: 1.1rem; margin: 1rem 0 0; }
 .memorial-nickname { color: var(--mem-accent); font-family: var(--mem-serif); font-size: 1.25rem; font-style: italic; margin: .8rem 0 0; }
-.hero-bio { color: var(--mem-muted); font-family: var(--mem-serif); font-size: 1rem; line-height: 1.6; margin: 1.35rem 0 0; max-width: 560px; }
+.hero-bio { color: var(--mem-muted); font-family: var(--mem-serif); font-size: 1rem; line-height: 1.6; margin: 1.35rem 0 0; max-width: 560px; white-space: pre-line; }
 .service-details { border-left: 1px solid var(--mem-accent); color: var(--mem-muted); font-size: .78rem; letter-spacing: .04em; margin-top: 1.5rem; padding-left: 1rem; }
 .service-details p { margin: .15rem 0; }
 .service-details .service-title { color: var(--mem-accent); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; }
@@ -78,10 +78,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .portrait-frame { background: linear-gradient(145deg, #292d2a, #151716); box-shadow: 18px 18px 0 rgba(167,181,159,.1); min-height: 440px; overflow: hidden; position: relative; }
 .portrait-frame::before { border: 1px solid rgba(167,181,159,.35); content: ''; inset: .75rem; pointer-events: none; position: absolute; z-index: 1; }
 .portrait-frame::after { border: 1px solid rgba(255,255,255,.18); content: ''; inset: 1.35rem; pointer-events: none; position: absolute; z-index: 1; }
-.portrait-frame img { height: 100%; object-fit: cover; width: 100%; }
-.portrait-placeholder { align-items: center; color: var(--mem-soft); display: flex; flex-direction: column; inset: 0; justify-content: center; padding: 2rem; position: absolute; text-align: center; }
-.portrait-placeholder span { color: var(--mem-accent); font-size: 2.2rem; margin-bottom: 1rem; }
-.portrait-placeholder p { font-family: var(--mem-serif); font-size: 1.05rem; line-height: 1.5; }
+.portrait-frame img { filter: grayscale(1) contrast(1.05); height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; }
 
 .section-shell { padding-bottom: 6rem; padding-top: 6rem; }
 .section-heading { max-width: 650px; }
@@ -148,6 +145,9 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .memorial-footer { color: var(--mem-muted); padding: 1rem 1.25rem 3rem; text-align: center; }
 .memorial-footer p { font-family: var(--mem-serif); font-size: 1.2rem; margin: 0; }
 .memorial-footer small { color: var(--mem-soft); font-size: .7rem; letter-spacing: .08em; }
+.memorial-footer .footer-credit { display: block; letter-spacing: normal; line-height: 1.7; margin-top: 1.5rem; }
+.memorial-footer .footer-credit a { color: var(--mem-accent-dark); text-decoration: none; }
+.memorial-footer .footer-credit a:hover { text-decoration: underline; }
 
 @media (min-width: 700px) {
   .memorial-nav { padding-left: 2rem; padding-right: 2rem; }
@@ -163,9 +163,15 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
   .memorial-nav { gap: 1rem; padding: 1rem; }
   .memorial-brand { font-size: .68rem; letter-spacing: .08em; }
   .nav-support { font-size: .68rem; text-align: right; }
-  .memorial-hero { gap: 2.5rem; min-height: auto; padding: 3rem 1rem 4rem; }
-  .hero-copy { max-width: none; }
-  h1 { font-size: clamp(3rem, 16vw, 5rem); }
+  .memorial-hero { gap: 0; min-height: auto; padding: 3rem 1rem 4rem; }
+  .hero-copy { display: contents; max-width: none; }
+  .memorial-kicker, h1#memorialName, .memorial-nickname, .memorial-dates { order: 1; }
+  .memorial-dates { margin-bottom: 2rem; }
+  .portrait-frame { order: 2; margin-bottom: 2rem; }
+  .hero-bio, .hero-actions { order: 3; }
+  .hero-bio { margin-top: 2rem; }
+  .hero-actions { margin-top: 2rem; }
+  h1 { font-size: clamp(2.4rem, 11vw, 3.4rem); }
   .memorial-nickname { font-size: 1.1rem; }
   .hero-actions { align-items: stretch; flex-direction: column; }
   .hero-actions .button { width: 100%; }

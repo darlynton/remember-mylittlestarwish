@@ -110,12 +110,10 @@ function renderContent(config) {
   }
 
   const photo = document.getElementById('memorialPhoto');
-  const placeholder = document.getElementById('portraitPlaceholder');
-  if (photo && placeholder && deceased.photo) {
+  if (photo && deceased.photo) {
     photo.src = deceased.photo;
     photo.alt = `A photograph of ${deceased.name}`;
     photo.hidden = false;
-    placeholder.hidden = true;
   }
 
   const registryLink = document.querySelector('.registry-link a');
