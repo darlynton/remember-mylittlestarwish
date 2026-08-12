@@ -219,10 +219,17 @@ function renderMessages(messages) {
       <footer>— ${escapeHTML(`${item.firstName || ''} ${item.lastName || ''}`.trim() || item.name || 'A friend')}</footer>
     </article>
   `).join('');
-  // Render the messages twice back-to-back so the auto-scroll can wrap from
-  // the end of the first copy back to the start of the second copy without
-  // any visible jump, creating a seamless continuous loop.
-  list.innerHTML = cardsHTML + cardsHTML;
+  list.innerHTML = cardsHTML;
+
+  // Only duplicate the content (to create a seamless auto-scroll loop) if
+  // there are actually enough messages to overflow the container. Otherwise
+  // a short list would appear to show every message twice with nothing to
+  // scroll.
+  const needsLoop = list.scrollHeight > list.clientHeight + 1;
+  if (needsLoop) {
+    list.innerHTML = cardsHTML + cardsHTML;
+  }
+  list.dataset.scrollerDuplicated = needsLoop ? 'true' : 'false';
   initMessageScroller(list);
 }
 
@@ -247,11 +254,13 @@ function initMessageScroller(list) {
       if (!lastTime) lastTime = time;
       const elapsed = time - lastTime;
       lastTime = time;
-      // Half the scrollable height is exactly one copy of the message list
-      // (since the content is duplicated). Once we've scrolled past one full
-      // copy, loop back by that same amount so it appears seamless.
-      const loopPoint = list.scrollHeight / 2;
-      const overflowing = loopPoint > list.clientHeight + 1;
+      // If the content was duplicated (see renderMessages), the child count
+      // is even and exactly double the "real" message count, so the first
+      // half's height is our seamless loop point. Otherwise there's nothing
+      // to duplicate against, so loop at the full scrollable distance.
+      const isDuplicated = list.dataset.scrollerDuplicated === 'true';
+      const loopPoint = isDuplicated ? list.scrollHeight / 2 : (list.scrollHeight - list.clientHeight);
+      const overflowing = loopPoint > (isDuplicated ? list.clientHeight + 1 : 0);
       if (!paused && overflowing) {
         list.scrollTop += (elapsed / 1000) * SPEED;
         if (list.scrollTop >= loopPoint) list.scrollTop -= loopPoint;
