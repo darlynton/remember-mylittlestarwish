@@ -213,19 +213,22 @@ function renderMessages(messages) {
     list.innerHTML = '<p class="empty-wall">Messages of love will appear here when the family has approved them.</p>';
     return;
   }
-  list.innerHTML = messages.map(item => `
+  const cardsHTML = messages.map(item => `
     <article class="message-card">
       <p>${escapeHTML(item.message)}</p>
       <footer>— ${escapeHTML(`${item.firstName || ''} ${item.lastName || ''}`.trim() || item.name || 'A friend')}</footer>
     </article>
   `).join('');
+  // Render the messages twice back-to-back so the auto-scroll can wrap from
+  // the end of the first copy back to the start of the second copy without
+  // any visible jump, creating a seamless continuous loop.
+  list.innerHTML = cardsHTML + cardsHTML;
   initMessageScroller(list);
 }
 
 function initMessageScroller(list) {
-  // Pixels of scroll per second. The previous value (0.008px/ms = 8px/s) was
-  // so slow it looked like the wall wasn't auto-scrolling at all.
-  const SPEED = 40;
+  // Pixels of scroll per second.
+  const SPEED = 26;
 
   if (list.dataset.scrollerAnimating !== 'true') {
     list.dataset.scrollerAnimating = 'true';
@@ -244,11 +247,14 @@ function initMessageScroller(list) {
       if (!lastTime) lastTime = time;
       const elapsed = time - lastTime;
       lastTime = time;
-      const overflowing = list.scrollHeight > list.clientHeight + 1;
+      // Half the scrollable height is exactly one copy of the message list
+      // (since the content is duplicated). Once we've scrolled past one full
+      // copy, loop back by that same amount so it appears seamless.
+      const loopPoint = list.scrollHeight / 2;
+      const overflowing = loopPoint > list.clientHeight + 1;
       if (!paused && overflowing) {
         list.scrollTop += (elapsed / 1000) * SPEED;
-        const bottom = list.scrollHeight - list.clientHeight;
-        if (list.scrollTop >= bottom) list.scrollTop = 0;
+        if (list.scrollTop >= loopPoint) list.scrollTop -= loopPoint;
       }
       window.requestAnimationFrame(scroll);
     };
