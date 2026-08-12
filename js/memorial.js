@@ -223,17 +223,12 @@ function renderMessages(messages) {
 }
 
 function initMessageScroller(list) {
-  if (list.dataset.scrollerRunning === 'true') return;
+  // Pixels of scroll per second. The previous value (0.008px/ms = 8px/s) was
+  // so slow it looked like the wall wasn't auto-scrolling at all.
+  const SPEED = 40;
 
-  const trySetup = attemptsLeft => {
-    if (list.scrollHeight <= list.clientHeight) {
-      if (attemptsLeft > 0) {
-        window.setTimeout(() => trySetup(attemptsLeft - 1), 50);
-      }
-      return;
-    }
-    if (list.dataset.scrollerRunning === 'true') return;
-    list.dataset.scrollerRunning = 'true';
+  if (list.dataset.scrollerAnimating !== 'true') {
+    list.dataset.scrollerAnimating = 'true';
 
     let paused = false;
     let lastTime = 0;
@@ -249,17 +244,28 @@ function initMessageScroller(list) {
       if (!lastTime) lastTime = time;
       const elapsed = time - lastTime;
       lastTime = time;
-      if (!paused) {
-        list.scrollTop += elapsed * 0.008;
+      const overflowing = list.scrollHeight > list.clientHeight + 1;
+      if (!paused && overflowing) {
+        list.scrollTop += (elapsed / 1000) * SPEED;
         const bottom = list.scrollHeight - list.clientHeight;
         if (list.scrollTop >= bottom) list.scrollTop = 0;
       }
       window.requestAnimationFrame(scroll);
     };
     window.requestAnimationFrame(scroll);
-  };
+  }
 
-  window.requestAnimationFrame(() => trySetup(10));
+  // Content (fonts, images, message counts) can change size after the initial
+  // render, so keep watching rather than only checking a handful of times.
+  if (typeof ResizeObserver !== 'undefined' && !list.dataset.scrollerObserved) {
+    list.dataset.scrollerObserved = 'true';
+    const observer = new ResizeObserver(() => {
+      // Nothing to do here beyond letting the rAF loop's overflow check
+      // pick up the new scrollHeight/clientHeight on the next frame.
+    });
+    observer.observe(list);
+    Array.from(list.children).forEach(child => observer.observe(child));
+  }
 }
 
 function readPendingMessages() {
