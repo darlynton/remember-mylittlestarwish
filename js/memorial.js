@@ -168,23 +168,25 @@ function initMessageForm() {
       submitButton?.setAttribute('disabled', 'true');
       if (submitButton) submitButton.textContent = 'Sending…';
       setStatus(status, 'Sending your message…', false);
-      try {
-        await fetch(api, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: 'submit', firstName, lastName, message: text })
-        });
-        form.reset();
-        if (counter) counter.textContent = '0 / 500';
-        setStatus(status, 'Thank you. Your message has been saved for the family and is pending moderation.', false);
-      } catch (error) {
+
+      // mode:'no-cors' means we can never read the response anyway, and
+      // Apps Script endpoints can be slow (cold starts, quota checks, etc.).
+      // Fire the request in the background instead of blocking the UI on it,
+      // so the page responds instantly to the user.
+      fetch(api, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: 'submit', firstName, lastName, message: text })
+      }).catch(error => {
         console.error('Condolence submission failed', error);
-        setStatus(status, 'Could not reach the message service. Please try again shortly.', true);
-      } finally {
-        submitButton?.removeAttribute('disabled');
-        if (submitButton && originalLabel) submitButton.textContent = originalLabel;
-      }
+      });
+
+      form.reset();
+      if (counter) counter.textContent = '0 / 500';
+      setStatus(status, 'Thank you. Your message has been saved for the family and is pending moderation.', false);
+      submitButton?.removeAttribute('disabled');
+      if (submitButton && originalLabel) submitButton.textContent = originalLabel;
       return;
     }
 
