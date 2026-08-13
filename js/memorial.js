@@ -109,8 +109,19 @@ function renderContent(config) {
     dates.textContent = deceased.dates;
   }
 
+  const video = document.getElementById('memorialVideo');
   const photo = document.getElementById('memorialPhoto');
-  if (photo && deceased.photo) {
+  if (video && deceased.video) {
+    video.src = deceased.video;
+    video.setAttribute('aria-label', `Memorial video of ${deceased.name}`);
+    video.hidden = false;
+    video.addEventListener('click', () => {
+      // Browsers block autoplay with sound, so start muted and enable audio
+      // after the visitor's first intentional interaction with the video.
+      video.muted = false;
+    }, { once: true });
+    photo?.setAttribute('hidden', 'true');
+  } else if (photo && deceased.photo) {
     photo.src = deceased.photo;
     photo.alt = `A photograph of ${deceased.name}`;
     photo.hidden = false;

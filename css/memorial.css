@@ -78,7 +78,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .portrait-frame { background: linear-gradient(145deg, #292d2a, #151716); box-shadow: 18px 18px 0 rgba(167,181,159,.1); min-height: 440px; overflow: hidden; position: relative; }
 .portrait-frame::before { border: 1px solid rgba(167,181,159,.35); content: ''; inset: .75rem; pointer-events: none; position: absolute; z-index: 1; }
 .portrait-frame::after { border: 1px solid rgba(255,255,255,.18); content: ''; inset: 1.35rem; pointer-events: none; position: absolute; z-index: 1; }
-.portrait-frame img { filter: grayscale(1) contrast(1.05); height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; }
+.portrait-frame img, .portrait-frame video { filter: grayscale(1) contrast(1.05); height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; }
 
 .section-shell { padding-bottom: 6rem; padding-top: 6rem; }
 .section-heading { max-width: 650px; }
