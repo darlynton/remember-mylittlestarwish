@@ -78,7 +78,8 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .portrait-frame { background: linear-gradient(145deg, #292d2a, #151716); box-shadow: 18px 18px 0 rgba(167,181,159,.1); min-height: 440px; overflow: hidden; position: relative; }
 .portrait-frame::before { border: 1px solid rgba(167,181,159,.35); content: ''; inset: .75rem; pointer-events: none; position: absolute; z-index: 1; }
 .portrait-frame::after { border: 1px solid rgba(255,255,255,.18); content: ''; inset: 1.35rem; pointer-events: none; position: absolute; z-index: 1; }
-.portrait-frame img, .portrait-frame video { filter: grayscale(1) contrast(1.05); height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; }
+.portrait-frame img, .portrait-frame video { height: 100%; inset: 0; object-fit: cover; object-position: center; position: absolute; width: 100%; }
+.portrait-frame img { filter: grayscale(1) contrast(1.05); }
 
 .section-shell { padding-bottom: 6rem; padding-top: 6rem; }
 .section-heading { max-width: 650px; }
@@ -115,7 +116,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .dialog-intro { color: var(--mem-muted); max-width: 620px; }
 
 .messages-area { border-bottom: 1px solid var(--mem-line); display: grid; gap: 3rem; }
-.message-section, .messages-wall { display: flex; flex-direction: column; min-width: 0; }
+.message-section, .messages-wall { display: flex; flex-direction: column; min-height: 0; min-width: 0; }
 .message-section .section-heading, .messages-wall .section-heading { height: 9rem; margin: 0; max-width: 760px; text-align: left; }
 .message-section h2, .messages-wall h2 { font-size: clamp(1.65rem, 4vw, 2.8rem); white-space: nowrap; }
 .message-section .section-heading > p:last-child, .messages-wall .section-heading > p:last-child { color: var(--mem-muted); font-size: .88rem; line-height: 1.55; margin: 1rem 0 0; max-width: 600px; }
@@ -131,7 +132,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 .form-status { color: var(--mem-accent-dark); min-height: 1.7em; }
 .form-status.is-error { color: #8a5e57; }
 
-.message-list { display: grid; flex: 1; gap: 1rem; margin-top: 2rem; max-width: 800px; min-height: 0; overflow-y: auto; padding-right: .75rem; scrollbar-color: var(--mem-accent) var(--mem-surface); scrollbar-width: thin; }
+.message-list { display: grid; flex: 1 1 auto; gap: 1rem; height: 0; margin-top: 2rem; max-width: 800px; min-height: 0; overflow-x: hidden; overflow-y: auto; padding-right: .75rem; scrollbar-color: var(--mem-accent) var(--mem-surface); scrollbar-width: thin; }
 .message-card { border-left: 1px solid var(--mem-accent); padding: .25rem 0 .25rem 1.25rem; }
 .message-card p { color: var(--mem-muted); font-family: var(--mem-serif); font-size: .98rem; line-height: 1.5; margin: 0; }
 .message-card footer { color: var(--mem-soft); font-size: .75rem; margin-top: .65rem; }
@@ -153,7 +154,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
   .memorial-hero { grid-template-columns: 1.05fr .95fr; padding-bottom: 8rem; padding-top: 7rem; }
   .portrait-frame { min-height: 590px; }
   .field-row { grid-template-columns: 1fr 1fr; }
-  .messages-area { align-items: start; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); }
+  .messages-area { align-items: stretch; grid-template-columns: minmax(0, 1.25fr) minmax(0, .75fr); }
   .message-section { border-right: 1px solid var(--mem-line); padding-right: clamp(1.5rem, 3vw, 3rem); }
   .messages-wall { padding-left: clamp(0rem, 1vw, 1rem); }
 }
@@ -183,14 +184,14 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
   .support-dialog__sheet h2 { font-size: 2.2rem; padding-right: 2rem; }
   .support-card { margin-top: 1.5rem; padding: 1rem; }
   .messages-area { gap: 3rem; }
-  .message-section, .messages-wall { display: block; }
+  .message-section, .messages-wall { display: block; min-height: auto; }
   .message-form { width: auto; }
   .message-section .section-heading, .messages-wall .section-heading { height: auto; }
   .message-section h2, .messages-wall h2 { font-size: 1.8rem; white-space: normal; }
   .message-form { margin-top: 1.5rem; padding: 1rem; }
   .field-row { grid-template-columns: 1fr; }
   .field input, .field textarea { font-size: 1rem; }
-  .message-list { margin-top: 1.5rem; max-height: 16rem; }
+  .message-list { height: auto; margin-top: 1.5rem; max-height: 16rem; }
   .message-card p { font-size: .95rem; }
   .registry-link { padding-bottom: 3rem; padding-top: 2.5rem; }
   .bank-details { border-left: 0; border-top: 1px solid var(--mem-line); padding-left: 0; padding-top: 2rem; }

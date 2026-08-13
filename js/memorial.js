@@ -240,12 +240,12 @@ function renderMessages(messages) {
 function initMessageScroller(list) {
   // Pixels of scroll per second.
   const SPEED = 26;
+  const INTERVAL = 50;
 
-  if (list.dataset.scrollerAnimating !== 'true') {
-    list.dataset.scrollerAnimating = 'true';
+  if (list.dataset.scrollerTimerRunning !== 'true') {
+    list.dataset.scrollerTimerRunning = 'true';
 
     let paused = false;
-    let lastTime = 0;
     const setPaused = value => { paused = value; };
     list.addEventListener('mouseenter', () => setPaused(true));
     list.addEventListener('mouseleave', () => setPaused(false));
@@ -254,19 +254,18 @@ function initMessageScroller(list) {
     list.addEventListener('touchstart', () => setPaused(true), { passive: true });
     list.addEventListener('touchend', () => setPaused(false), { passive: true });
 
-    const scroll = time => {
-      if (!lastTime) lastTime = time;
-      const elapsed = time - lastTime;
-      lastTime = time;
+    const scroll = () => {
       const loopPoint = list.scrollHeight - list.clientHeight;
       const overflowing = loopPoint > 1;
       if (!paused && overflowing) {
-        list.scrollTop += (elapsed / 1000) * SPEED;
+        list.scrollTop += (INTERVAL / 1000) * SPEED;
         if (list.scrollTop >= loopPoint) list.scrollTop = 0;
       }
-      window.requestAnimationFrame(scroll);
     };
-    window.requestAnimationFrame(scroll);
+    // A timer starts as soon as the page is loaded and keeps checking after
+    // the API response changes the wall's height. This avoids the browser
+    // waiting for a later layout/inspection event before starting movement.
+    window.setInterval(scroll, INTERVAL);
   }
 
   // Content (fonts, images, message counts) can change size after the initial
