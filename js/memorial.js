@@ -230,6 +230,11 @@ function renderMessages(messages) {
   `).join('');
   list.innerHTML = cardsHTML;
   initMessageScroller(list);
+  // Wait for the browser to calculate the new content height before the
+  // scrolling loop evaluates whether the wall overflows.
+  window.requestAnimationFrame(() => {
+    list.scrollTop = 0;
+  });
 }
 
 function initMessageScroller(list) {
@@ -269,8 +274,13 @@ function initMessageScroller(list) {
   if (typeof ResizeObserver !== 'undefined' && !list.dataset.scrollerObserved) {
     list.dataset.scrollerObserved = 'true';
     const observer = new ResizeObserver(() => {
-      // Nothing to do here beyond letting the rAF loop's overflow check
-      // pick up the new scrollHeight/clientHeight on the next frame.
+      // The rAF loop checks overflow continuously. This observer ensures a
+      // newly loaded set of messages gets a fresh frame immediately.
+      window.requestAnimationFrame(() => {
+        if (list.scrollHeight > list.clientHeight + 1 && list.scrollTop >= list.scrollHeight - list.clientHeight) {
+          list.scrollTop = 0;
+        }
+      });
     });
     observer.observe(list);
     Array.from(list.children).forEach(child => observer.observe(child));
