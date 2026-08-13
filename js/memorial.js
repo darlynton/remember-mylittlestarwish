@@ -229,16 +229,6 @@ function renderMessages(messages) {
     </article>
   `).join('');
   list.innerHTML = cardsHTML;
-
-  // Only duplicate the content (to create a seamless auto-scroll loop) if
-  // there are actually enough messages to overflow the container. Otherwise
-  // a short list would appear to show every message twice with nothing to
-  // scroll.
-  const needsLoop = list.scrollHeight > list.clientHeight + 1;
-  if (needsLoop) {
-    list.innerHTML = cardsHTML + cardsHTML;
-  }
-  list.dataset.scrollerDuplicated = needsLoop ? 'true' : 'false';
   initMessageScroller(list);
 }
 
@@ -263,16 +253,11 @@ function initMessageScroller(list) {
       if (!lastTime) lastTime = time;
       const elapsed = time - lastTime;
       lastTime = time;
-      // If the content was duplicated (see renderMessages), the child count
-      // is even and exactly double the "real" message count, so the first
-      // half's height is our seamless loop point. Otherwise there's nothing
-      // to duplicate against, so loop at the full scrollable distance.
-      const isDuplicated = list.dataset.scrollerDuplicated === 'true';
-      const loopPoint = isDuplicated ? list.scrollHeight / 2 : (list.scrollHeight - list.clientHeight);
-      const overflowing = loopPoint > (isDuplicated ? list.clientHeight + 1 : 0);
+      const loopPoint = list.scrollHeight - list.clientHeight;
+      const overflowing = loopPoint > 1;
       if (!paused && overflowing) {
         list.scrollTop += (elapsed / 1000) * SPEED;
-        if (list.scrollTop >= loopPoint) list.scrollTop -= loopPoint;
+        if (list.scrollTop >= loopPoint) list.scrollTop = 0;
       }
       window.requestAnimationFrame(scroll);
     };
