@@ -116,7 +116,8 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 
 .messages-area { border-bottom: 1px solid var(--mem-line); display: grid; gap: 3rem; }
 .message-section { min-width: 0; }
-.message-section .section-heading { margin: 0 auto; max-width: 760px; text-align: center; }
+.message-section .section-heading { margin: 0 auto; max-width: 760px; text-align: left; }
+.message-section .section-heading, .messages-wall .section-heading { height: 9rem; }
 .message-section h2, .messages-wall h2 { font-size: clamp(1.65rem, 4vw, 2.8rem); white-space: nowrap; }
 .message-section .section-heading > p:last-child { font-size: .88rem; line-height: 1.55; margin-top: 1rem; }
 .message-section .eyebrow { color: var(--mem-accent-dark); }
@@ -133,6 +134,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
 
 .messages-wall { min-width: 0; }
 .messages-wall .section-heading { max-width: 760px; }
+.messages-wall .wall-note { color: var(--mem-soft); font-size: .82rem; line-height: 1.5; margin: .75rem 0 0; }
 .message-list { display: grid; gap: 1rem; margin-top: 2rem; max-height: 28rem; max-width: 800px; overflow-y: auto; padding-right: .75rem; scrollbar-color: var(--mem-accent) var(--mem-surface); scrollbar-width: thin; }
 .message-card { border-left: 1px solid var(--mem-accent); padding: .25rem 0 .25rem 1.25rem; }
 .message-card p { color: var(--mem-muted); font-family: var(--mem-serif); font-size: .98rem; line-height: 1.5; margin: 0; }
@@ -185,6 +187,7 @@ h2 { font-size: clamp(2.35rem, 6vw, 4.4rem); }
   .support-dialog__sheet h2 { font-size: 2.2rem; padding-right: 2rem; }
   .support-card { margin-top: 1.5rem; padding: 1rem; }
   .messages-area { gap: 3rem; }
+  .message-section .section-heading, .messages-wall .section-heading { height: auto; }
   .message-section h2, .messages-wall h2 { font-size: 1.8rem; white-space: normal; }
   .message-form { margin-top: 1.5rem; padding: 1rem; }
   .field-row { grid-template-columns: 1fr; }
